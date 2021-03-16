@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ namespace Empresa.Projeto_Demanda
             string name = req.Query["name"];
 
 
+            AzureSqlRepository azureSqlRepository = new AzureSqlRepository();
             if(req.Method == HttpMethods.Post)
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -30,15 +32,18 @@ namespace Empresa.Projeto_Demanda
                         PropertyNameCaseInsensitive = true
                     });
 
-                AzureSqlRepository azureSqlRepository = new AzureSqlRepository();
                 azureSqlRepository.SaveDapper(data);
+                return new OkObjectResult("Saved");
+            } else if(req.Method == HttpMethods.Get)
+            {
+                var itens = azureSqlRepository.GetAll();
+
+                return new OkObjectResult(itens);
             }
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            else
+            {
+                return new NotFoundResult();
+            }
         }
     }
 }
