@@ -20,16 +20,18 @@ namespace Empresa.Projeto_Demanda
 
             string name = req.Query["name"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            UserSql data = System.Text.Json.JsonSerializer.Deserialize<UserSql>(requestBody,
-                new System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
 
             if(req.Method == HttpMethods.Post)
             {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                UserSql data = System.Text.Json.JsonSerializer.Deserialize<UserSql>(requestBody,
+                    new System.Text.Json.JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
 
+                AzureSqlRepository azureSqlRepository = new AzureSqlRepository();
+                azureSqlRepository.SaveDapper(data);
             }
 
             string responseMessage = string.IsNullOrEmpty(name)

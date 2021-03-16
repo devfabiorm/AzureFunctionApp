@@ -1,7 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper.Contrib.Extensions;
+using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Empresa.Projeto_Demanda
 {
@@ -12,6 +11,13 @@ namespace Empresa.Projeto_Demanda
 
         public AzureSqlRepository()
         {
+            _connAzureSql = Environment.GetEnvironmentVariable("AzureSQL_ConnectionString");
+        }
+
+        public void SaveDapper(UserSql userSql)
+        {
+            new Microsoft.Data.SqlClient.SqlConnection(_connAzureSql)
+                .Insert(new UserSql { Name = userSql.Name });
         }
     }
 }
