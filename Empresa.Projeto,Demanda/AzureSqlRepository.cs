@@ -28,7 +28,7 @@ namespace Empresa.Projeto_Demanda
             {
                 command.Connection = new SqlConnection(_connAzureSql);
                 command.CommandType = System.Data.CommandType.Text;
-                command.CommandText = "INSERT INTO UserSql (Name) values ('@Name')";
+                command.CommandText = "INSERT INTO UserSqls (Name) values ('@Name')";
 
                 var parameterName = command.CreateParameter();
                 parameterName.ParameterName = nameof(userSql.Name);
@@ -47,7 +47,7 @@ namespace Empresa.Projeto_Demanda
         public IEnumerable<UserSql> GetAll()
         {
             return new Microsoft.Data.SqlClient.SqlConnection(_connAzureSql)
-                .Query<UserSql>("SELECT * FROM dbo.UserSql ORDER BY Id Desc");
+                .Query<UserSql>("SELECT * FROM dbo.UserSqls ORDER BY Id Desc");
         }
     }
 }
