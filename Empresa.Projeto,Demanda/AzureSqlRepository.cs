@@ -21,6 +21,29 @@ namespace Empresa.Projeto_Demanda
             new Microsoft.Data.SqlClient.SqlConnection(_connAzureSql)
                 .Insert(new UserSql { Name = userSql.Name });
         }
+
+        public void SaveADO(UserSql userSql)
+        {
+            using(var command = _sqlConnection.CreateCommand())
+            {
+                command.Connection = new SqlConnection(_connAzureSql);
+                command.CommandType = System.Data.CommandType.Text;
+                command.CommandText = "INSERT INTO UserSql (Name) values ('@Name')";
+
+                var parameterName = command.CreateParameter();
+                parameterName.ParameterName = nameof(userSql.Name);
+                parameterName.Value = userSql.Name;
+                command.Parameters.Add(parameterName);
+
+                if (command.Connection.State != System.Data.ConnectionState.Open)
+                    command.Connection.Open();
+
+                command.ExecuteNonQuery();
+
+                command.Connection.Close();
+            }
+        }
+
         public IEnumerable<UserSql> GetAll()
         {
             return new Microsoft.Data.SqlClient.SqlConnection(_connAzureSql)
