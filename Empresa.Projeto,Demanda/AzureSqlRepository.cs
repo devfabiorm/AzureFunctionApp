@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Empresa.Projeto_Demanda
 {
-    public class AzureSqlRepository
+    public class AzureSqlRepository : IAzureSqlRepository
     {
         private readonly string _connAzureSql;
         private SqlConnection _sqlConnection;
@@ -24,7 +24,7 @@ namespace Empresa.Projeto_Demanda
 
         public void SaveADO(UserSql userSql)
         {
-            using(var command = _sqlConnection.CreateCommand())
+            using (var command = _sqlConnection.CreateCommand())
             {
                 command.Connection = new SqlConnection(_connAzureSql);
                 command.CommandType = System.Data.CommandType.Text;
